@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://120.78.161.232:3306/life?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 1234567891
+      web-stat-filter:
+        enabled: true
+      stat-view-servlet:
+        enabled: true
+

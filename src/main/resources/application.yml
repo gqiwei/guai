@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    #读取application-dev.yml，测试环境dev、生产环境pro
+    active: dev

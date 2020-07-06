@@ -16,8 +16,9 @@ import java.util.Map;
 @RestController
 public class TestController {
     @RequestMapping("/test")
-    public String test(){
-        return "{code:200}";
+    public String test(String url) throws Exception {
+        throw new Exception();
+//        return url;
     }
 
     @RequestMapping("user/login")
