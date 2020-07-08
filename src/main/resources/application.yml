@@ -2,3 +2,16 @@ spring:
   profiles:
     #读取application-dev.yml，测试环境dev、生产环境pro
     active: dev
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+
+
+mybatis:
+  #扫描mapper.xml路径
+  mapper-locations: /mybatis/**/*.xml
+  configuration:
+    #开启驼峰原则
+    map-underscore-to-camel-case: true

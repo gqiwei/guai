@@ -25,7 +25,7 @@ public class FilterConfig {
         filterRegistrationBean.addUrlPatterns("/*");
 
         Map<String,String> initParameters = new HashMap<String,String>();
-        initParameters.put("excludes","");//白名单
+        initParameters.put("excludes","");//白名单，  多个以逗号相隔
         filterRegistrationBean.setInitParameters(initParameters);
 
         return filterRegistrationBean;

@@ -1,11 +1,40 @@
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://120.78.161.232:3306/life?useUnicode=true&characterEncoding=utf8
+      url: jdbc:mysql://localhost:3306/life?useUnicode=true&characterEncoding=utf8
       username: root
-      password: 1234567891
+      password: 123456789
+      #WebStatFilter
       web-stat-filter:
         enabled: true
+        profile-enable: true
+        url-pattern: /*
+      #StatViewServlet
       stat-view-servlet:
         enabled: true
+      initial-size: 1
+      min-idle: 3
+      max-active: 20
 
+      #配置获取连接等待超时时间
+      max-wait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 30000
+      #让连接池知道数据库已经断开了，并且自动测试连接查询
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
+      filter:
+        stat:
+          enabled: true
+          #开启慢查询
+          log-slow-sql: true
+          slow-sql-millis: 2000
+          #合并sql
+          merge-sql: true
+        wall:
+          enabled: true

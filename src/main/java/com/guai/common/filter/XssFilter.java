@@ -22,7 +22,9 @@ public class XssFilter implements Filter {
         if(temp != null){
             String[] url = temp.split(",");
             for(int i=0;url!=null && i<url.length;i++){
-                excludes.add(url[i]); //添加白名单
+                if(!"".equals(url[i])){
+                    excludes.add(url[i]); //添加白名单
+                }
             }
         }
     }
