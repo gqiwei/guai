@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
  * @author gqw
  * @date 2020-07-07
  */
-@Mapper
+//@Mapper
 public interface TestDAO {
     @Select("select count(*) from life_plan")
     public int select();
