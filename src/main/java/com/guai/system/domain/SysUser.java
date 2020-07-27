@@ -21,6 +21,7 @@ public class SysUser {
     private String email;
     private String mobile;
     private Integer status;
+    private Integer isDel;
     private Integer userIdCreate;
     private Date gmtCreate;
     private Date gmtCodified;

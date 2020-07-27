@@ -14,6 +14,7 @@ public class SysRole {
     private String roleName;
     private String roleCode;
     private String remark;
+    private Integer isDel;
     private Integer userIdCreate;
     private Date gmtCreate;
     private Date gmtModified;

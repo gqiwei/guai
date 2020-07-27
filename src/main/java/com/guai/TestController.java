@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -58,6 +59,7 @@ public class TestController {
         return result;
     }
 
+    @PreAuthorize("hasAuthority('sys:example')")
     @ApiOperation(value="响应消息主体测试",notes = "测试接口访问")
     @GetMapping("/r")
     public R r(String some){

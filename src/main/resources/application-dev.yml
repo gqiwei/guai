@@ -1,7 +1,7 @@
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/life?useUnicode=true&characterEncoding=utf8
+      url: jdbc:mysql://localhost:3306/guai?useUnicode=true&characterEncoding=utf8
       username: root
       password: 123456789
       #WebStatFilter
@@ -38,3 +38,9 @@ spring:
           merge-sql: true
         wall:
           enabled: true
+
+
+jwt:
+  header: Authorization
+  secret: asdfgh
+  expireTime: 30
