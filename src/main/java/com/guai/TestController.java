@@ -55,7 +55,7 @@ public class TestController {
         data.put("name","Super Admin");
         Map<String,Object> result = new HashMap<String,Object>();
         result.put("data",data);
-        result.put("code",20000);
+        result.put("code",0);
         return result;
     }
 
