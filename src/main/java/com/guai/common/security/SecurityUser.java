@@ -15,6 +15,7 @@ public class SecurityUser implements UserDetails {
     private Integer userId;
     private String username;
     private String password;
+    private Long expireTime;//过期时间
     private Collection<? extends GrantedAuthority> authorities;
 
     public SecurityUser(){

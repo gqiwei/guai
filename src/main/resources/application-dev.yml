@@ -38,7 +38,11 @@ spring:
           merge-sql: true
         wall:
           enabled: true
-
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    timeout: 10s
 
 jwt:
   header: Authorization

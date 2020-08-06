@@ -5,7 +5,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * JWT工具类
@@ -28,12 +32,18 @@ public class JwtUtil {
     private String secret; //秘钥
     @Value("${jwt.expireTime}")
     private int expireTime; //有效期
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     private static final String USERID = "userid";//用户id
     private static final String CREATED = "created";//创建时间
     private static final String USERNAME = "username";//用户账号
     private static final String AUTHORITIES = "authorities";//权限列表
     private static final String TOKEN_PREFIX = "Bearer "; //令牌前缀
+
+    private static final String REDIS_KEY = "tokenKey";// 用户信息存入reidskey
+
+    private static final Long MIN_REFRESH_TIME = 5 * 60 * 1000L; //token刷新的最小时长
 
     /**
      * 获取用户信息
@@ -50,18 +60,29 @@ public class JwtUtil {
             if(isTokenExpired(token)){
                 return null;
             }
-            String username = claims.get(USERNAME).toString();
-            Integer userId = (Integer)claims.get(USERID);
-            Object authors = claims.get(AUTHORITIES);
-            Set<String> perms = new HashSet<>();
-            if (authors instanceof List) {
-                for (Object object : (List) authors) {
-                    perms.add(((Map) object).get("authority").toString());
-                }
+            String key = claims.get(REDIS_KEY).toString();
+            // 1 从redis中获取用户信息
+            SecurityUser user =(SecurityUser) redisTemplate.opsForValue().get(key);
+            // 2 判断是否到reids中用户信息过期刷新时间
+            long user_expireTime = user.getExpireTime();
+            long currentTime = DateUtil.getNowDateTimestamp();
+            if (user_expireTime - currentTime <= MIN_REFRESH_TIME){
+                // 2.1 刷新用户信息
+                user.setExpireTime(user.getExpireTime()+expireTime*60*1000);
+                refreshToken(user,key);
             }
-            Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(perms.toArray(new String[0]));
+//            String username = claims.get(USERNAME).toString();
+//            Integer userId = (Integer)claims.get(USERID);
+//            Object authors = claims.get(AUTHORITIES);
+//            Set<String> perms = new HashSet<>();
+//            if (authors instanceof List) {
+//                for (Object object : (List) authors) {
+//                    perms.add(((Map) object).get("authority").toString());
+//                }
+//            }
+//            Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(perms.toArray(new String[0]));
 
-            return new SecurityUser(userId,username,"",authorities);
+            return  user;
         }
 
         return null;
@@ -73,11 +94,16 @@ public class JwtUtil {
      * @return 令牌
      */
     public String generateToken(SecurityUser userDetail) {
-        Map<String, Object> claims = new HashMap<>(3);
-        claims.put(USERID,userDetail.getUserId());
-        claims.put(USERNAME, userDetail.getUsername());
-        claims.put(CREATED, new Date());
-        claims.put(AUTHORITIES, userDetail.getAuthorities());
+        userDetail.setExpireTime(DateUtil.getNowDateTimestamp()+expireTime*60*1000); //设置过期时间
+        String key = IdUtil.getUNID();// reids key
+        System.out.println(key);
+        refreshToken(userDetail,key);
+        Map<String, Object> claims = new HashMap<>(1);
+        claims.put(REDIS_KEY,key);
+//        claims.put(USERID,userDetail.getUserId());
+//        claims.put(USERNAME, userDetail.getUsername());
+//        claims.put(CREATED, new Date());
+//        claims.put(AUTHORITIES, userDetail.getAuthorities());
         return generateToken(claims);
     }
 
@@ -87,8 +113,8 @@ public class JwtUtil {
      * @return 令牌
      */
     private String generateToken(Map<String, Object> claims) {
-        Date expirationDate = new Date(System.currentTimeMillis() + expireTime*60*1000);
-        return Jwts.builder().setClaims(claims).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, secret).compact();
+//        Date expirationDate = new Date(System.currentTimeMillis() + expireTime*60*1000);
+        return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     /**
@@ -132,6 +158,15 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /**
+     *
+     * @param user 用户信息
+     * @param key 存入redis的key
+     */
+    private void refreshToken(SecurityUser user,String key){
+        redisTemplate.opsForValue().set(key,user,expireTime, TimeUnit.MINUTES);
     }
 
     public static void main(String[] args) {
