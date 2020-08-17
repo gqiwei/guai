@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 过滤请求
                 .authorizeRequests()
-                .antMatchers("/login","/test","/druid/**","favicon.ico").anonymous()
+                .antMatchers("/login","/loginCode","/test","/druid/**","favicon.ico").anonymous()
                 .antMatchers(HttpMethod.GET,"/*.html","/**/*.hmtl","/**/*.css","/**/*.js").permitAll()
                 //swagger资源放开
                 .antMatchers("/swagger-resources/**","/v2/api-docs").anonymous()

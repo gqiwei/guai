@@ -11,5 +11,6 @@ public class LoginMessageDTO {
 
     private String username;
     private String password;
-    private String code;
+    private String code;//验证码
+    private String key;// 验证码存入redis的key
 }

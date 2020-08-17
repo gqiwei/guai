@@ -8,5 +8,5 @@ import com.guai.system.domain.SysUser;
  */
 public interface ISysUserService {
     SysUser selectUserByUserName(String userName);
-    String login(String username,String password);
+    String login(String username,String password,String code,String key);
 }
