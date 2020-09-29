@@ -7,6 +7,17 @@
 			 left join sys_role_menu t2 on t1.menu_id = t2.menu_id
 			 left join sys_user_role t3 on t2.role_id = t3.role_id
 			 left join sys_role t4 on t4.role_id = t3.role_id
-		where t1.status = '1' and t4.is_del = '0' and t3.user_id = #{userId}
+		where t1.status = 1 and t4.is_del = 0 and t3.user_id = #{userId}
     </select>
+	
+	<select id="selectMenuTreeByUserId" resultType="com.guai.system.domain.SysMenu">
+		select distinct t1.menu_id,t1.menu_name, t1.parent_id,  t1.path, t1.component,t1.is_frame,t1.type, ifnull(t1.perms,'') as perms,  t1.icon, t1.order_num
+		from sys_menu t1
+			 left join sys_role_menu t2 on t1.menu_id = t2.menu_id
+			 left join sys_user_role t3 on t2.role_id = t3.role_id
+			 left join sys_role t4 on t3.role_id = t4.role_id
+			 left join sys_user t5 on t3.user_id = t5.user_id
+		where t5.user_id = #{userId} and t1.status = 1 and t4.is_del = 0
+		order by t1.parent_id, t1.order_num
+	</select>
 </mapper>

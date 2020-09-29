@@ -1,5 +1,7 @@
 package com.guai.system.dao;
 
+import com.guai.system.domain.SysMenu;
+
 import java.util.List;
 
 /**
@@ -8,4 +10,6 @@ import java.util.List;
  */
 public interface SysMenuDao {
     List<String> selectPermsByUserId(Integer userId);
+
+    List<SysMenu> selectMenuTreeByUserId(Integer userId);
 }

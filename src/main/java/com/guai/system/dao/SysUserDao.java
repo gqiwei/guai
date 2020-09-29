@@ -8,4 +8,6 @@ import com.guai.system.domain.SysUser;
  */
 public interface SysUserDao {
     SysUser selectUserByUserName(String userName);
+
+    SysUser selectUserByUserId(Integer userId);
 }

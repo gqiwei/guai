@@ -5,4 +5,9 @@
         select user_id,user_name,password,nick_name,sex,birth,pic,dept_id,email,mobile,status,user_id_create,gmt_create,gmt_modified
         from sys_user where user_name = #{userNmae} and is_del = 0
     </select>
+
+    <select id="selectUserByUserId" resultType="com.guai.system.domain.SysUser">
+        select user_id,user_name,password,nick_name,sex,birth,pic,dept_id,email,mobile,status,user_id_create,gmt_create,gmt_modified
+        from sys_user where user_id = #{userId} and is_del = 0
+    </select>
 </mapper>

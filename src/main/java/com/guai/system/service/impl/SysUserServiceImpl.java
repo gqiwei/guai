@@ -36,6 +36,11 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
+    public SysUser selectUserByUserId(Integer userId) {
+        return sysUserDao.selectUserByUserId(userId);
+    }
+
+    @Override
     public String login(String username, String password,String code,String key) {
         //会调用我们定义的 UserDetailsServiceImpl 的 #loadUserByUsername(String username)
         String captcha =(String) redisTemplate.opsForValue().get(key);

@@ -1,6 +1,7 @@
 package com.guai.system.service.impl;
 
 import com.guai.system.dao.SysMenuDao;
+import com.guai.system.domain.SysMenu;
 import com.guai.system.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,10 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public List<String> selectPermsByUserId(Integer userId) {
         return sysMenuDao.selectPermsByUserId(userId);
+    }
+
+    @Override
+    public List<SysMenu> selectMenuTreeByUserId(Integer userId) {
+        return sysMenuDao.selectMenuTreeByUserId(userId);
     }
 }

@@ -2,6 +2,8 @@ package com.guai.system.service;
 
 //import io.swagger.models.auth.In;
 
+import com.guai.system.domain.SysMenu;
+
 import java.util.List;
 
 /**
@@ -11,5 +13,7 @@ import java.util.List;
 public interface ISysMenuService {
 
     List<String> selectPermsByUserId(Integer userId);
+
+    List<SysMenu> selectMenuTreeByUserId(Integer userId);
 
 }
